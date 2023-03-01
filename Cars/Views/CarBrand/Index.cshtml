@@ -1,0 +1,60 @@
+﻿@model IList<CarBrand>
+@{
+    ViewData["Title"] = "Car Brands";
+}
+
+<div class="list-group list-group-flush">
+    @foreach (var brand in Model)
+    {
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="list-group-item list-group-item-action" data-bs-toggle="modal"
+                    data-bs-target="#brandModal" data-bs-brand-title="@brand.Title"
+                    data-bs-brand-id="@brand.Id" data-bs-brand-active="@brand.Active">
+                @if (!brand.Active)
+                {
+                    <del>@brand.Title</del>
+                }
+                else
+                {
+                    @brand.Title
+                }
+            </button>
+            <form method="post" asp-action="Delete" asp-route-id="@brand.Id">
+                <button type="submit" class="list-group-item list-group-item-action list-group-item-danger">
+                    Delete
+                </button>
+            </form>
+        </div>
+    }
+    <button type="button" class="list-group-item list-group-item-action d-flex justify-content-between" data-bs-toggle="modal"
+            data-bs-target="#brandModal">
+        + Add new brand
+    </button>
+</div>
+
+<div class="modal fade" id="brandModal" tabindex="-1" aria-labelledby="brandModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="brandModalLabel">New message</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="/CarBrand/Update" id="brandUpdate">
+                    <input type="hidden" id="brand-id" name="Id"/>
+                    <div class="mb-3">
+                        <label for="brand-title" class="col-form-label">Title:</label>
+                        <input required name="Title" type="text" class="form-control" id="brand-title">
+                    </div>
+                    <div class="form-check form-switch">
+                        <input name="Active" class="form-check-input" type="checkbox" id="brand-active" value="true">
+                        <label class="form-check-label" for="brand-active">Active</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="submit" class="btn btn-primary" value="Save" form="brandUpdate"/>
+            </div>
+        </div>
+    </div>
+</div>
