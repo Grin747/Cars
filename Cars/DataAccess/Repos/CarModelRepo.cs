@@ -35,6 +35,14 @@ public class CarModelRepo : ICarModelRepo
     {
         var sql = "insert into models (title, active, brand_id) values (@Title, @Active, @BrandId)";
         using var db = _context.CreateConnection();
+        var brands = db.ExecuteScalar<int>("select count(*) from brands where id = @Id", new { entity.Id });
+        
+        if (brands < 1)
+        {
+            _logger.LogInformation("Brand id {Id} doesn't exists", entity.Id);
+            return;
+        }
+
         var rows = db.Execute(sql, entity);
         _logger.LogInformation("{Rows} row(s) inserted into models", rows);
     }
