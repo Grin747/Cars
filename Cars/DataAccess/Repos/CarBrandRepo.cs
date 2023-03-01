@@ -60,7 +60,7 @@ public class CarBrandRepo : ICarBrandRepo
                 }
 
                 return currentBrand;
-            }).ToList();
+            }).Distinct().ToList();
         }
     }
 
